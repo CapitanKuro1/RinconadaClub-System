@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="638b00e2ba2c48be9fe9752c4d1f4c84" Name="Diagram1">
+        <EntityTypeShape EntityType="ModelEF.Auditoria" Width="1.5" PointX="5.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ModelEF.Carnet" Width="1.5" PointX="3" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ModelEF.Instalaciones" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ModelEF.Invitados" Width="1.5" PointX="3" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ModelEF.Pagos" Width="1.5" PointX="3" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ModelEF.Reservas" Width="1.5" PointX="6" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ModelEF.Socio" Width="1.5" PointX="0.75" PointY="6.25" IsExpanded="true" />
+        <AssociationConnector Association="ModelEF.FK_Carnet_Socio" ManuallyRouted="false" />
+        <AssociationConnector Association="ModelEF.FK_Reservas_Instalaciones" ManuallyRouted="false" />
+        <AssociationConnector Association="ModelEF.FK_Invitados_Socio" ManuallyRouted="false" />
+        <AssociationConnector Association="ModelEF.FK_Pagos_Socio" ManuallyRouted="false" />
+        <AssociationConnector Association="ModelEF.FK_Reservas_Socio" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

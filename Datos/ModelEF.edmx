@@ -1,0 +1,453 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ModelEF.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Auditoria">
+          <Key>
+            <PropertyRef Name="id_auditoria" />
+          </Key>
+          <Property Name="id_auditoria" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_usuario" Type="int" />
+          <Property Name="accion" Type="nvarchar" MaxLength="200" />
+          <Property Name="fecha_accion" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Carnet">
+          <Key>
+            <PropertyRef Name="id_carnet" />
+          </Key>
+          <Property Name="id_carnet" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fecha_emision" Type="datetime" />
+          <Property Name="estado" Type="bit" />
+          <Property Name="id_socio" Type="int" />
+        </EntityType>
+        <EntityType Name="Instalaciones">
+          <Key>
+            <PropertyRef Name="id_instalacion" />
+          </Key>
+          <Property Name="id_instalacion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="nvarchar" MaxLength="50" />
+          <Property Name="tipo" Type="nvarchar" MaxLength="50" />
+          <Property Name="ubicacion" Type="nvarchar" MaxLength="100" />
+          <Property Name="capacidad" Type="int" />
+        </EntityType>
+        <EntityType Name="Invitados">
+          <Key>
+            <PropertyRef Name="id_invitado" />
+          </Key>
+          <Property Name="id_invitado" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre_invitado" Type="nvarchar" MaxLength="50" />
+          <Property Name="dni_invitado" Type="nvarchar" MaxLength="50" />
+          <Property Name="id_socio" Type="int" />
+          <Property Name="fecha_visita" Type="date" />
+        </EntityType>
+        <EntityType Name="Pagos">
+          <Key>
+            <PropertyRef Name="id_pago" />
+          </Key>
+          <Property Name="id_pago" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="monto" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="fecha_pago" Type="datetime" />
+          <Property Name="metodo_pago" Type="nvarchar" MaxLength="30" />
+          <Property Name="id_socio" Type="int" />
+        </EntityType>
+        <EntityType Name="Reservas">
+          <Key>
+            <PropertyRef Name="id_reserva" />
+          </Key>
+          <Property Name="id_reserva" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fecha_reserva" Type="date" />
+          <Property Name="hora_inicio" Type="time" Precision="7" />
+          <Property Name="hora_fin" Type="time" Precision="7" />
+          <Property Name="id_socio" Type="int" />
+          <Property Name="area" Type="nvarchar" MaxLength="30" />
+          <Property Name="id_instalacion" Type="int" />
+        </EntityType>
+        <EntityType Name="Socio">
+          <Key>
+            <PropertyRef Name="id_socio" />
+          </Key>
+          <Property Name="id_socio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre_completo" Type="nvarchar" MaxLength="50" />
+          <Property Name="dni" Type="nvarchar" MaxLength="8" />
+          <Property Name="correo" Type="nvarchar" MaxLength="100" />
+          <Property Name="telefono" Type="nvarchar" MaxLength="15" />
+          <Property Name="direccion" Type="nvarchar" MaxLength="100" />
+          <Property Name="estado" Type="bit" />
+        </EntityType>
+        <Association Name="FK_Carnet_Socio">
+          <End Role="Socio" Type="Self.Socio" Multiplicity="0..1" />
+          <End Role="Carnet" Type="Self.Carnet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Socio">
+              <PropertyRef Name="id_socio" />
+            </Principal>
+            <Dependent Role="Carnet">
+              <PropertyRef Name="id_socio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invitados_Socio">
+          <End Role="Socio" Type="Self.Socio" Multiplicity="0..1" />
+          <End Role="Invitados" Type="Self.Invitados" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Socio">
+              <PropertyRef Name="id_socio" />
+            </Principal>
+            <Dependent Role="Invitados">
+              <PropertyRef Name="id_socio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Pagos_Socio">
+          <End Role="Socio" Type="Self.Socio" Multiplicity="0..1" />
+          <End Role="Pagos" Type="Self.Pagos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Socio">
+              <PropertyRef Name="id_socio" />
+            </Principal>
+            <Dependent Role="Pagos">
+              <PropertyRef Name="id_socio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reservas_Instalaciones">
+          <End Role="Instalaciones" Type="Self.Instalaciones" Multiplicity="0..1" />
+          <End Role="Reservas" Type="Self.Reservas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Instalaciones">
+              <PropertyRef Name="id_instalacion" />
+            </Principal>
+            <Dependent Role="Reservas">
+              <PropertyRef Name="id_instalacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reservas_Socio">
+          <End Role="Socio" Type="Self.Socio" Multiplicity="0..1" />
+          <End Role="Reservas" Type="Self.Reservas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Socio">
+              <PropertyRef Name="id_socio" />
+            </Principal>
+            <Dependent Role="Reservas">
+              <PropertyRef Name="id_socio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ModelEFStoreContainer">
+          <EntitySet Name="Auditoria" EntityType="Self.Auditoria" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Carnet" EntityType="Self.Carnet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Instalaciones" EntityType="Self.Instalaciones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Invitados" EntityType="Self.Invitados" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pagos" EntityType="Self.Pagos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Reservas" EntityType="Self.Reservas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Socio" EntityType="Self.Socio" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Carnet_Socio" Association="Self.FK_Carnet_Socio">
+            <End Role="Socio" EntitySet="Socio" />
+            <End Role="Carnet" EntitySet="Carnet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invitados_Socio" Association="Self.FK_Invitados_Socio">
+            <End Role="Socio" EntitySet="Socio" />
+            <End Role="Invitados" EntitySet="Invitados" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pagos_Socio" Association="Self.FK_Pagos_Socio">
+            <End Role="Socio" EntitySet="Socio" />
+            <End Role="Pagos" EntitySet="Pagos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reservas_Instalaciones" Association="Self.FK_Reservas_Instalaciones">
+            <End Role="Instalaciones" EntitySet="Instalaciones" />
+            <End Role="Reservas" EntitySet="Reservas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reservas_Socio" Association="Self.FK_Reservas_Socio">
+            <End Role="Socio" EntitySet="Socio" />
+            <End Role="Reservas" EntitySet="Reservas" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ModelEF" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Auditoria">
+          <Key>
+            <PropertyRef Name="id_auditoria" />
+          </Key>
+          <Property Name="id_auditoria" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_usuario" Type="Int32" />
+          <Property Name="accion" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="fecha_accion" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Carnet">
+          <Key>
+            <PropertyRef Name="id_carnet" />
+          </Key>
+          <Property Name="id_carnet" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fecha_emision" Type="DateTime" Precision="3" />
+          <Property Name="estado" Type="Boolean" />
+          <Property Name="id_socio" Type="Int32" />
+          <NavigationProperty Name="Socio" Relationship="Self.FK_Carnet_Socio" FromRole="Carnet" ToRole="Socio" />
+        </EntityType>
+        <EntityType Name="Instalaciones">
+          <Key>
+            <PropertyRef Name="id_instalacion" />
+          </Key>
+          <Property Name="id_instalacion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="tipo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ubicacion" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="capacidad" Type="Int32" />
+          <NavigationProperty Name="Reservas" Relationship="Self.FK_Reservas_Instalaciones" FromRole="Instalaciones" ToRole="Reservas" />
+        </EntityType>
+        <EntityType Name="Invitados">
+          <Key>
+            <PropertyRef Name="id_invitado" />
+          </Key>
+          <Property Name="id_invitado" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre_invitado" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="dni_invitado" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="id_socio" Type="Int32" />
+          <Property Name="fecha_visita" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Socio" Relationship="Self.FK_Invitados_Socio" FromRole="Invitados" ToRole="Socio" />
+        </EntityType>
+        <EntityType Name="Pagos">
+          <Key>
+            <PropertyRef Name="id_pago" />
+          </Key>
+          <Property Name="id_pago" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="monto" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="fecha_pago" Type="DateTime" Precision="3" />
+          <Property Name="metodo_pago" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="id_socio" Type="Int32" />
+          <NavigationProperty Name="Socio" Relationship="Self.FK_Pagos_Socio" FromRole="Pagos" ToRole="Socio" />
+        </EntityType>
+        <EntityType Name="Reservas">
+          <Key>
+            <PropertyRef Name="id_reserva" />
+          </Key>
+          <Property Name="id_reserva" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fecha_reserva" Type="DateTime" Precision="0" />
+          <Property Name="hora_inicio" Type="Time" Precision="7" />
+          <Property Name="hora_fin" Type="Time" Precision="7" />
+          <Property Name="id_socio" Type="Int32" />
+          <Property Name="area" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="id_instalacion" Type="Int32" />
+          <NavigationProperty Name="Instalaciones" Relationship="Self.FK_Reservas_Instalaciones" FromRole="Reservas" ToRole="Instalaciones" />
+          <NavigationProperty Name="Socio" Relationship="Self.FK_Reservas_Socio" FromRole="Reservas" ToRole="Socio" />
+        </EntityType>
+        <EntityType Name="Socio">
+          <Key>
+            <PropertyRef Name="id_socio" />
+          </Key>
+          <Property Name="id_socio" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre_completo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="dni" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="correo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="telefono" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="direccion" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="estado" Type="Boolean" />
+          <NavigationProperty Name="Carnet" Relationship="Self.FK_Carnet_Socio" FromRole="Socio" ToRole="Carnet" />
+          <NavigationProperty Name="Invitados" Relationship="Self.FK_Invitados_Socio" FromRole="Socio" ToRole="Invitados" />
+          <NavigationProperty Name="Pagos" Relationship="Self.FK_Pagos_Socio" FromRole="Socio" ToRole="Pagos" />
+          <NavigationProperty Name="Reservas" Relationship="Self.FK_Reservas_Socio" FromRole="Socio" ToRole="Reservas" />
+        </EntityType>
+        <Association Name="FK_Carnet_Socio">
+          <End Role="Socio" Type="Self.Socio" Multiplicity="0..1" />
+          <End Role="Carnet" Type="Self.Carnet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Socio">
+              <PropertyRef Name="id_socio" />
+            </Principal>
+            <Dependent Role="Carnet">
+              <PropertyRef Name="id_socio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reservas_Instalaciones">
+          <End Role="Instalaciones" Type="Self.Instalaciones" Multiplicity="0..1" />
+          <End Role="Reservas" Type="Self.Reservas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Instalaciones">
+              <PropertyRef Name="id_instalacion" />
+            </Principal>
+            <Dependent Role="Reservas">
+              <PropertyRef Name="id_instalacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invitados_Socio">
+          <End Role="Socio" Type="Self.Socio" Multiplicity="0..1" />
+          <End Role="Invitados" Type="Self.Invitados" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Socio">
+              <PropertyRef Name="id_socio" />
+            </Principal>
+            <Dependent Role="Invitados">
+              <PropertyRef Name="id_socio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Pagos_Socio">
+          <End Role="Socio" Type="Self.Socio" Multiplicity="0..1" />
+          <End Role="Pagos" Type="Self.Pagos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Socio">
+              <PropertyRef Name="id_socio" />
+            </Principal>
+            <Dependent Role="Pagos">
+              <PropertyRef Name="id_socio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reservas_Socio">
+          <End Role="Socio" Type="Self.Socio" Multiplicity="0..1" />
+          <End Role="Reservas" Type="Self.Reservas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Socio">
+              <PropertyRef Name="id_socio" />
+            </Principal>
+            <Dependent Role="Reservas">
+              <PropertyRef Name="id_socio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BDEFEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Auditoria" EntityType="Self.Auditoria" />
+          <EntitySet Name="Carnet" EntityType="Self.Carnet" />
+          <EntitySet Name="Instalaciones" EntityType="Self.Instalaciones" />
+          <EntitySet Name="Invitados" EntityType="Self.Invitados" />
+          <EntitySet Name="Pagos" EntityType="Self.Pagos" />
+          <EntitySet Name="Reservas" EntityType="Self.Reservas" />
+          <EntitySet Name="Socio" EntityType="Self.Socio" />
+          <AssociationSet Name="FK_Carnet_Socio" Association="Self.FK_Carnet_Socio">
+            <End Role="Socio" EntitySet="Socio" />
+            <End Role="Carnet" EntitySet="Carnet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reservas_Instalaciones" Association="Self.FK_Reservas_Instalaciones">
+            <End Role="Instalaciones" EntitySet="Instalaciones" />
+            <End Role="Reservas" EntitySet="Reservas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invitados_Socio" Association="Self.FK_Invitados_Socio">
+            <End Role="Socio" EntitySet="Socio" />
+            <End Role="Invitados" EntitySet="Invitados" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pagos_Socio" Association="Self.FK_Pagos_Socio">
+            <End Role="Socio" EntitySet="Socio" />
+            <End Role="Pagos" EntitySet="Pagos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reservas_Socio" Association="Self.FK_Reservas_Socio">
+            <End Role="Socio" EntitySet="Socio" />
+            <End Role="Reservas" EntitySet="Reservas" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelEFStoreContainer" CdmEntityContainer="BDEFEntities">
+          <EntitySetMapping Name="Auditoria">
+            <EntityTypeMapping TypeName="ModelEF.Auditoria">
+              <MappingFragment StoreEntitySet="Auditoria">
+                <ScalarProperty Name="id_auditoria" ColumnName="id_auditoria" />
+                <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+                <ScalarProperty Name="accion" ColumnName="accion" />
+                <ScalarProperty Name="fecha_accion" ColumnName="fecha_accion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Carnet">
+            <EntityTypeMapping TypeName="ModelEF.Carnet">
+              <MappingFragment StoreEntitySet="Carnet">
+                <ScalarProperty Name="id_carnet" ColumnName="id_carnet" />
+                <ScalarProperty Name="fecha_emision" ColumnName="fecha_emision" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="id_socio" ColumnName="id_socio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Instalaciones">
+            <EntityTypeMapping TypeName="ModelEF.Instalaciones">
+              <MappingFragment StoreEntitySet="Instalaciones">
+                <ScalarProperty Name="id_instalacion" ColumnName="id_instalacion" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="ubicacion" ColumnName="ubicacion" />
+                <ScalarProperty Name="capacidad" ColumnName="capacidad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Invitados">
+            <EntityTypeMapping TypeName="ModelEF.Invitados">
+              <MappingFragment StoreEntitySet="Invitados">
+                <ScalarProperty Name="id_invitado" ColumnName="id_invitado" />
+                <ScalarProperty Name="nombre_invitado" ColumnName="nombre_invitado" />
+                <ScalarProperty Name="dni_invitado" ColumnName="dni_invitado" />
+                <ScalarProperty Name="id_socio" ColumnName="id_socio" />
+                <ScalarProperty Name="fecha_visita" ColumnName="fecha_visita" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pagos">
+            <EntityTypeMapping TypeName="ModelEF.Pagos">
+              <MappingFragment StoreEntitySet="Pagos">
+                <ScalarProperty Name="id_pago" ColumnName="id_pago" />
+                <ScalarProperty Name="monto" ColumnName="monto" />
+                <ScalarProperty Name="fecha_pago" ColumnName="fecha_pago" />
+                <ScalarProperty Name="metodo_pago" ColumnName="metodo_pago" />
+                <ScalarProperty Name="id_socio" ColumnName="id_socio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reservas">
+            <EntityTypeMapping TypeName="ModelEF.Reservas">
+              <MappingFragment StoreEntitySet="Reservas">
+                <ScalarProperty Name="id_reserva" ColumnName="id_reserva" />
+                <ScalarProperty Name="fecha_reserva" ColumnName="fecha_reserva" />
+                <ScalarProperty Name="hora_inicio" ColumnName="hora_inicio" />
+                <ScalarProperty Name="hora_fin" ColumnName="hora_fin" />
+                <ScalarProperty Name="id_socio" ColumnName="id_socio" />
+                <ScalarProperty Name="area" ColumnName="area" />
+                <ScalarProperty Name="id_instalacion" ColumnName="id_instalacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Socio">
+            <EntityTypeMapping TypeName="ModelEF.Socio">
+              <MappingFragment StoreEntitySet="Socio">
+                <ScalarProperty Name="id_socio" ColumnName="id_socio" />
+                <ScalarProperty Name="nombre_completo" ColumnName="nombre_completo" />
+                <ScalarProperty Name="dni" ColumnName="dni" />
+                <ScalarProperty Name="correo" ColumnName="correo" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="direccion" ColumnName="direccion" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
